@@ -48,7 +48,7 @@ const EventItem: FC<EventItemProps> = ({ event }) => {
           </div>
         </div>
         <div className={classes.actions}>
-          <Button href={exploreLink}>
+          <Button href={exploreLink} link>
             <span>Explore Event</span>
             <span className={classes.icon}>
               <ArrowRightIcon />
