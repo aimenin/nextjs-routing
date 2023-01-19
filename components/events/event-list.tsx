@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { getAllEvents } from '../../dummy-data';
+import { Event } from '../../types/mainTypes';
 import EventItem from './event-item';
 
 import classes from './event-list.module.css';
 
 interface EventListProps {
-  items: ReturnType<typeof getAllEvents>;
+  items: Event[];
 }
 
 const EventList: FC<EventListProps> = ({ items }) => {
