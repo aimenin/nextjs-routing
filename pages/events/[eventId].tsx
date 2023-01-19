@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { FC } from 'react';
-import { getEvent, getAllEvents } from '../../api/events';
+import { getEvent, getAllEvents, getFeaturedEvents } from '../../api/events';
 import EventContent from '../../components/event-detail/event-content';
 import EventLogistics from '../../components/event-detail/event-logistics';
 import EventSummary from '../../components/event-detail/event-summary';
@@ -14,9 +14,9 @@ interface EventDetailProps {
 const EventDetail: FC<EventDetailProps> = ({ selectedEvent }) => {
   if (!selectedEvent) {
     return (
-      <ErrorAlert>
-        <p>No event found!</p>
-      </ErrorAlert>
+      <div className="center">
+        <p>Loading...</p>
+      </div>
     );
   }
 
@@ -50,13 +50,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       selectedEvent: event,
     },
+    revalidate: 30,
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const events = await getAllEvents();
+  const featuredEvents = getFeaturedEvents(events);
 
-  const paths = events.map((event) => ({
+  const paths = featuredEvents.map((event) => ({
     params: {
       eventId: event.id,
     },
@@ -64,7 +66,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   };
 };
 
