@@ -1,4 +1,4 @@
-import { Event } from '../types/mainTypes';
+import { DateFilter, Event } from '../types/mainTypes';
 
 export async function getAllEvents(): Promise<Event[]> {
   const response = await fetch(
@@ -29,4 +29,19 @@ export async function getEvent(id: string): Promise<Event> {
 
 export function getFeaturedEvents(events: Event[]) {
   return events.filter((event) => event.isFeatured);
+}
+
+export async function getFilteredEvents(dateFilter: DateFilter) {
+  const { year, month } = dateFilter;
+
+  const events = await getAllEvents();
+
+  let filteredEvents = events.filter((event) => {
+    const eventDate = new Date(event.date);
+    return (
+      eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
+    );
+  });
+
+  return filteredEvents;
 }
