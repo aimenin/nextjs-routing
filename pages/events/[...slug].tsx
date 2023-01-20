@@ -7,6 +7,7 @@ import Button from '../../components/ui/button';
 import ErrorAlert from '../../components/ui/error-alert/error-alert';
 import { getFilteredEvents } from '../../api/events';
 import { Event } from '../../types/mainTypes';
+import Head from 'next/head';
 
 interface FilteredEventsPageProps {
   hasError: boolean;
@@ -25,9 +26,20 @@ const FilteredEventsPage: FC<FilteredEventsPageProps> = ({
     return <p>Invalid filter. Please adjust ypur values</p>;
   }
 
+  const pageHeadData = (
+    <Head>
+      <title>Filtered events</title>
+      <meta
+        name="description"
+        content={`All events for ${filteredMonth}/${filteredYear}`}
+      />
+    </Head>
+  );
+
   if (!events || events.length === 0) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for chosen filter</p>
         </ErrorAlert>
@@ -44,6 +56,7 @@ const FilteredEventsPage: FC<FilteredEventsPageProps> = ({
 
   return (
     <>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={events} />
     </>

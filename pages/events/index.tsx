@@ -5,6 +5,7 @@ import EventsSearch from '../../components/events/events-search';
 import { getAllEvents } from '../../api/events';
 import { Event } from '../../types/mainTypes';
 import { FC } from 'react';
+import Head from 'next/head';
 
 interface AllEventsPageProps {
   events: Event[];
@@ -21,6 +22,13 @@ const AllEventsPage: FC<AllEventsPageProps> = ({ events }) => {
 
   return (
     <div>
+      <Head>
+        <title>All events</title>
+        <meta
+          name="description"
+          content="Find a lot of great events that allow you to evolve"
+        />
+      </Head>
       <EventsSearch onSearch={findEventsHandler} />
       <EventList items={events} />
     </div>

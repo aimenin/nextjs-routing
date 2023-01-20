@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
 import { FC } from 'react';
 import { getEvent, getAllEvents, getFeaturedEvents } from '../../api/events';
 import EventContent from '../../components/event-detail/event-content';
@@ -22,6 +23,13 @@ const EventDetail: FC<EventDetailProps> = ({ selectedEvent }) => {
 
   return (
     <>
+      <Head>
+        <title>{selectedEvent.title}</title>
+        <meta
+          name="description"
+          content="Find a lot of great events that allow you to evolve"
+        />
+      </Head>
       <EventSummary title={selectedEvent.title} />
       <EventLogistics
         address={selectedEvent.location}
