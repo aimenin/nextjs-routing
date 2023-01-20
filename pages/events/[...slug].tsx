@@ -7,6 +7,7 @@ import Button from '../../components/ui/button';
 import ErrorAlert from '../../components/ui/error-alert/error-alert';
 import { getFilteredEvents } from '../../api/events';
 import { Event } from '../../types/mainTypes';
+import Head from 'next/head';
 
 interface FilteredEventsPageProps {
   hasError: boolean;
@@ -44,6 +45,13 @@ const FilteredEventsPage: FC<FilteredEventsPageProps> = ({
 
   return (
     <>
+      <Head>
+        <title>Filtered events</title>
+        <meta
+          name="description"
+          content={`All events for ${filteredMonth}/${filteredYear}`}
+        />
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={events} />
     </>
