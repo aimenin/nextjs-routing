@@ -56,7 +56,7 @@ const handler = async (req: EventNextApiRequest, res: NextApiResponse) => {
     try {
       const documents = await db
         .collection('comments')
-        .find()
+        .find({ eventId: eventId })
         .sort({
           _id: -1,
         })
