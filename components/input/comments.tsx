@@ -21,6 +21,7 @@ const Comments: FC<CommentProps> = ({ eventId }) => {
     const fetchComments = async () => {
       const response = await fetch(`/api/comments/${eventId}`);
       const data = await response.json();
+      console.log('data ', data);
       setComments(data.comments);
     };
 

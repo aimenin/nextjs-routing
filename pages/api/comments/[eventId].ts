@@ -46,11 +46,15 @@ const handler = async (req: EventNextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === 'GET') {
-    const dummyList = [
-      { id: 'c1', name: 'Max', email: 'test@test.com', text: 'yyy' },
-      { id: 'c2', name: 'Artem', email: 'test2@test2.com', text: 'yyy2' },
-    ];
-    res.status(200).json({ message: 'List of comments', comments: dummyList });
+    const documents = await db
+      .collection('comments')
+      .find()
+      .sort({
+        _id: -1,
+      })
+      .toArray();
+
+    res.status(200).json({ message: 'List of comments', comments: documents });
   }
 
   client.close();
