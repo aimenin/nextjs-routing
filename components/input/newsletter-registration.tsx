@@ -1,13 +1,28 @@
-import { FC, FormEventHandler } from 'react';
+import { FC, FormEventHandler, useState } from 'react';
 import classes from './newsletter-registration.module.css';
 
 const NewsletterRegistration: FC = () => {
-  const registrationHandler: FormEventHandler<HTMLFormElement> = (event) => {
+  const [email, setEmail] = useState('');
+
+  const registrationHandler: FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
     event.preventDefault();
 
     // fetch user input (state or refs)
     // optional: validate input
     // send valid data to API
+
+    const data = await fetch('/api/newsletter', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(await data.json());
   };
 
   return (
@@ -20,6 +35,8 @@ const NewsletterRegistration: FC = () => {
             id="email"
             placeholder="Your email"
             aria-label="Your email"
+            value={email}
+            onChange={(event) => setEmail(event.currentTarget.value)}
           />
           <button>Register</button>
         </div>

@@ -5,6 +5,7 @@ import { getEvent, getAllEvents, getFeaturedEvents } from '../../api/events';
 import EventContent from '../../components/event-detail/event-content';
 import EventLogistics from '../../components/event-detail/event-logistics';
 import EventSummary from '../../components/event-detail/event-summary';
+import Comments from '../../components/input/comments';
 import ErrorAlert from '../../components/ui/error-alert/error-alert';
 import { Event } from '../../types/mainTypes';
 
@@ -40,6 +41,7 @@ const EventDetail: FC<EventDetailProps> = ({ selectedEvent }) => {
       <EventContent>
         <p>{selectedEvent.description}</p>
       </EventContent>
+      <Comments eventId={selectedEvent.id} />
     </>
   );
 };

@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { getAllEvents, getFeaturedEvents } from '../api/events';
 import { Event } from '../types/mainTypes';
 import EventList from '../components/events/event-list';
+import NewsletterRegistration from '../components/input/newsletter-registration';
 
 interface HomePageProps {
   events: Event[];
@@ -20,6 +21,7 @@ const HomePage: FC<HomePageProps> = ({ events }) => {
           content="Find a lot of great events that allow you to evolve"
         />
       </Head>
+      <NewsletterRegistration />
       <EventList items={events} />
     </div>
   );
