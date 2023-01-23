@@ -1,14 +1,9 @@
 import { FC, FormEventHandler, useRef, useState } from 'react';
+import { ApiSenderComment } from '../../types/apiTypes';
 import classes from './new-comment.module.css';
 
-type AddComment = {
-  email: string;
-  name: string;
-  text: string;
-};
-
 interface NewCommentProps {
-  onAddComment: (commentInfo: AddComment) => void;
+  onAddComment: (commentInfo: ApiSenderComment) => void;
 }
 
 const NewComment: FC<NewCommentProps> = ({ onAddComment }) => {
