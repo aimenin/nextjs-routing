@@ -5,7 +5,7 @@ export const connectToNewsletter = async (): Promise<{
   db: Db;
 }> => {
   const client = await MongoClient.connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bllf1q7.mongodb.net/newsletter?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bllf1q7.mongodb.net/events?retryWrites=true&w=majority`
   );
   const db = client.db();
   return {

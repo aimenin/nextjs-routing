@@ -1,12 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { connectToNewsletter } from '../../../api/mongo';
 import { ApiSenderComment } from '../../../types/apiTypes';
 
 interface EventNextApiRequest extends NextApiRequest {
   body: ApiSenderComment;
 }
 
-const handler = (req: EventNextApiRequest, res: NextApiResponse) => {
+const handler = async (req: EventNextApiRequest, res: NextApiResponse) => {
   const eventId = req.query.eventId;
+
+  const { client, db } = await connectToNewsletter();
 
   if (req.method === 'POST') {
     const { email, name, text } = req.body;
@@ -25,13 +28,21 @@ const handler = (req: EventNextApiRequest, res: NextApiResponse) => {
     console.log(email, name, text);
 
     const newComment = {
-      id: new Date().toISOString(),
       email,
       text,
       name,
+      eventId,
     };
 
-    res.status(201).json({ message: 'Added comment.', comment: newComment });
+    const result = await db.collection('comments').insertOne(newComment);
+
+    res.status(201).json({
+      message: 'Added comment.',
+      comment: {
+        ...newComment,
+        id: result.insertedId,
+      },
+    });
   }
 
   if (req.method === 'GET') {
@@ -41,6 +52,8 @@ const handler = (req: EventNextApiRequest, res: NextApiResponse) => {
     ];
     res.status(200).json({ message: 'List of comments', comments: dummyList });
   }
+
+  client.close();
 };
 
 export default handler;

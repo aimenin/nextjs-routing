@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { client, db } = await connectToNewsletter();
 
-    await db.collection('emails').insertOne({
+    await db.collection('newsletter').insertOne({
       email: userEmail,
     });
 
