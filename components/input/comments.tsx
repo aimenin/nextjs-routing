@@ -38,7 +38,12 @@ const Comments: FC<CommentProps> = ({ eventId }) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(await response.json());
+    const newComment: { message: string; comment: ApiComment } =
+      await response.json();
+    console.log('newComment ', newComment);
+    if (response.ok) {
+      setComments((comments) => [...comments, newComment.comment]);
+    }
   };
 
   return (

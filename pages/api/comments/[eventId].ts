@@ -34,27 +34,42 @@ const handler = async (req: EventNextApiRequest, res: NextApiResponse) => {
       eventId,
     };
 
-    const result = await db.collection('comments').insertOne(newComment);
+    try {
+      const result = await db.collection('comments').insertOne(newComment);
 
-    res.status(201).json({
-      message: 'Added comment.',
-      comment: {
-        ...newComment,
-        id: result.insertedId,
-      },
-    });
+      res.status(201).json({
+        message: 'Added comment.',
+        comment: {
+          ...newComment,
+          id: result.insertedId,
+        },
+      });
+    } catch (e) {
+      res.status(500).json({
+        message: 'There is an error while adding comment',
+        comment: {},
+      });
+    }
   }
 
   if (req.method === 'GET') {
-    const documents = await db
-      .collection('comments')
-      .find()
-      .sort({
-        _id: -1,
-      })
-      .toArray();
+    try {
+      const documents = await db
+        .collection('comments')
+        .find()
+        .sort({
+          _id: -1,
+        })
+        .toArray();
 
-    res.status(200).json({ message: 'List of comments', comments: documents });
+      res
+        .status(200)
+        .json({ message: 'List of comments', comments: documents });
+    } catch (e) {
+      res
+        .status(500)
+        .json({ message: 'Impossible get any comments', comments: [] });
+    }
   }
 
   client.close();
