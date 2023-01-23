@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { MongoClient } from 'mongodb';
+import { connectToNewsletter } from '../../api/mongo';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -10,10 +11,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
-    const client = await MongoClient.connect(
-      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bllf1q7.mongodb.net/newsletter?retryWrites=true&w=majority`
-    );
-    const db = client.db();
+    // const client = await MongoClient.connect(
+    //   `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bllf1q7.mongodb.net/newsletter?retryWrites=true&w=majority`
+    // );
+    // const db = client.db();
+
+    const { client, db } = await connectToNewsletter();
 
     await db.collection('emails').insertOne({
       email: userEmail,
@@ -21,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     client.close();
 
-    res.status(201).json({ message: 'Signed Up!' });
+    res.status(201).json({ message: 'Successfully subscribed' });
   }
 };
 
