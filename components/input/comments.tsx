@@ -1,8 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import classes from './comments.module.css';
+import { ApiComment, ApiSenderComment } from '../../types/apiTypes';
 
 interface CommentProps {
   eventId: string;
@@ -10,14 +11,34 @@ interface CommentProps {
 
 const Comments: FC<CommentProps> = ({ eventId }) => {
   const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<ApiComment[]>([]);
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  function addCommentHandler(commentData: any) {
-    // send data to API
-  }
+  useEffect(() => {
+    const fetchComments = async () => {
+      const response = await fetch(`/api/comments/${eventId}`);
+      const data = await response.json();
+      setComments(data.comments);
+    };
+
+    if (showComments) {
+      fetchComments();
+    }
+  }, [showComments, eventId]);
+
+  const addCommentHandler = async (commentData: ApiSenderComment) => {
+    const response = await fetch(`/api/comments/${eventId}`, {
+      method: 'POST',
+      body: JSON.stringify(commentData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(await response.json());
+  };
 
   return (
     <section className={classes.comments}>
@@ -25,7 +46,7 @@ const Comments: FC<CommentProps> = ({ eventId }) => {
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <CommentList comments={comments} />}
     </section>
   );
 };
