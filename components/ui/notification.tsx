@@ -1,15 +1,10 @@
 import { FC, useContext } from 'react';
+import { NotificationType } from '../../types/notification';
 
 import classes from './notification.module.css';
 import NotificationContext from '../../store/notification-context';
 
-interface NotificationProps {
-  title: string;
-  message: string;
-  status: 'success' | 'error' | 'pending';
-}
-
-const Notification: FC<NotificationProps> = ({ title, message, status }) => {
+const Notification: FC<NotificationType> = ({ title, message, status }) => {
   const notificationCtx = useContext(NotificationContext);
 
   let statusClasses = '';
