@@ -1,14 +1,15 @@
-import { createContext, FC } from 'react';
+import { createContext, FC, useState } from 'react';
+import { NotificationType } from '../types/notification';
 
 interface NotificationContextProps {
-  notification: null;
-  showNotification: VoidFunction;
+  notification: NotificationType | null;
+  showNotification: (notificationData: NotificationType) => void;
   hideNotification: VoidFunction;
 }
 
 const defaultState = {
   notification: null,
-  showNotification: function () {},
+  showNotification: function (notificationData: NotificationType) {},
   hideNotification: function () {},
 };
 
@@ -22,8 +23,25 @@ interface NotificationContextProviderProps {
 export const NotificationContextProvider: FC<
   NotificationContextProviderProps
 > = ({ children }) => {
+  const [activeNotification, setActiveNotification] =
+    useState<NotificationType | null>(null);
+
+  const showNotificationHandler = (notificationData: NotificationType) => {
+    setActiveNotification(notificationData);
+  };
+
+  const hideNotificationHandler = () => {
+    setActiveNotification(null);
+  };
+
+  const context = {
+    notification: activeNotification,
+    showNotification: showNotificationHandler,
+    hideNotification: hideNotificationHandler,
+  };
+
   return (
-    <NotificationContext.Provider value={defaultState}>
+    <NotificationContext.Provider value={context}>
       {children}
     </NotificationContext.Provider>
   );
