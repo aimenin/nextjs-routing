@@ -1,28 +1,49 @@
-import { FC, FormEventHandler, useState } from 'react';
+import { FC, FormEventHandler, useContext, useState } from 'react';
+import NotificationContext from '../../store/notification-context';
 import classes from './newsletter-registration.module.css';
 
 const NewsletterRegistration: FC = () => {
   const [email, setEmail] = useState('');
+
+  const notificationContext = useContext(NotificationContext);
 
   const registrationHandler: FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
 
-    // fetch user input (state or refs)
-    // optional: validate input
-    // send valid data to API
-
-    const data = await fetch('/api/newsletter', {
-      method: 'POST',
-      body: JSON.stringify({
-        email,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    notificationContext.showNotification({
+      title: 'Signing Up...',
+      message: 'Registering newsletter',
+      status: 'pending',
     });
-    console.log(await data.json());
+
+    try {
+      const data = await fetch('/api/newsletter', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!data.ok) {
+        throw new Error('Something went wrong');
+      }
+
+      notificationContext.showNotification({
+        title: 'Success!',
+        message: 'Successfully registered for newsletter',
+        status: 'success',
+      });
+    } catch (e) {
+      notificationContext.showNotification({
+        title: 'Error',
+        message: 'Someting went wrong',
+        status: 'error',
+      });
+    }
   };
 
   return (
