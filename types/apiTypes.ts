@@ -5,4 +5,4 @@ export type ApiComment = {
   text: string;
 };
 
-export type ApiSenderComment = Omit<ApiComment, 'id'>;
+export type ApiSenderComment = Omit<ApiComment, '_id'>;
