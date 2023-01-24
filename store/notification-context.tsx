@@ -1,4 +1,4 @@
-import { createContext, FC, useState } from 'react';
+import { createContext, FC, useEffect, useState } from 'react';
 import { NotificationType } from '../types/notification';
 
 interface NotificationContextProps {
@@ -25,6 +25,22 @@ export const NotificationContextProvider: FC<
 > = ({ children }) => {
   const [activeNotification, setActiveNotification] =
     useState<NotificationType | null>(null);
+
+  useEffect(() => {
+    if (
+      activeNotification &&
+      (activeNotification.status === 'success' ||
+        activeNotification.status === 'error')
+    ) {
+      const timeout = setTimeout(() => {
+        hideNotificationHandler();
+      }, 3000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [activeNotification]);
 
   const showNotificationHandler = (notificationData: NotificationType) => {
     setActiveNotification(notificationData);
